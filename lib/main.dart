@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/database_service.dart';
 import 'services/chat_provider.dart';
 import 'utils/constants.dart';
@@ -9,16 +10,18 @@ import 'screens/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
+  
   // Initialize Hive
   await DatabaseService.init();
   
-  // Note: In a production app, use an environment variable for the API Key
-  const String apiKey = 'YOUR_GEMINI_API_KEY';
-
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ChatProvider(apiKey: apiKey)),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(apiKey: AppConstants.geminiApiKey),
+        ),
       ],
       child: const SamvidhanMitraApp(),
     ),

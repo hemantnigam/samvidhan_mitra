@@ -1,9 +1,18 @@
 import os
 import time
 import google.generativeai as genai
+from dotenv import load_dotenv
 
-# 1. SETUP: Replace with your actual Gemini API Key
-API_KEY = "YOUR_GEMINI_API_KEY"
+# Load environment variables from .env file
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
+
+# 1. SETUP: Fetch Gemini API Key from environment
+API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not API_KEY or API_KEY == "your_api_key_here":
+    print("Error: Please set your GEMINI_API_KEY in the .env file.")
+    exit(1)
+
 genai.configure(api_key=API_KEY)
 
 # 2. PDF PATH: The official Constitution PDF URL or local path

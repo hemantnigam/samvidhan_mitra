@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConstants {
   static const String appName = 'Samvidhan Mitra';
@@ -9,9 +10,9 @@ class AppConstants {
   static const Color accentGreen = Color(0xFF138808);
   static const Color backgroundColor = Color(0xFFF7FAFC);
   
-  // AI Config
-  // This will be updated with the actual file URI once uploaded to Gemini File API
-  static const String constitutionFileUri = 'PLACEHOLDER_FILE_URI';
+  // AI Config fetched from .env
+  static String get geminiApiKey => dotenv.env['GEMINI_API_KEY'] ?? '';
+  static String get constitutionFileUri => dotenv.env['CONSTITUTION_FILE_URI'] ?? '';
   
   static const String systemPrompt = '''
 You are 'Samvidhan Mitra' (Constitution AI), an expert, politically neutral assistant dedicated exclusively to the Constitution of India. 
