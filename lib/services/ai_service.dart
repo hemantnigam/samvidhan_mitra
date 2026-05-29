@@ -1,35 +1,53 @@
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../utils/constants.dart';
 
 class AIService {
-  late GenerativeModel _model;
-  ChatSession? _chat;
+  final String apiKey;
+  final String model = 'llama-3.3-70b-versatile'; // Verified active model on Groq
 
-  AIService({required String apiKey}) {
-    _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
-      apiKey: apiKey,
-      systemInstruction: Content.system(AppConstants.systemPrompt),
-      // In a real implementation, you would link the file search tool here
-      // tools: [Tool(fileSearch: FileSearch())], 
-    );
-  }
+  AIService({required this.apiKey});
+
+  // For Groq, we'll maintain history manually
+  List<Map<String, String>> _history = [];
 
   Future<String> sendMessage(String message) async {
-    try {
-      _chat ??= _model.startChat();
+    final url = Uri.parse('https://api.groq.com/openai/v1/chat/completions');
+
+    // Add user message to history
+    _history.add({"role": "user", "content": message});
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $apiKey',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "model": model,
+        "messages": [
+          {"role": "system", "content": AppConstants.systemPrompt},
+          ..._history,
+        ],
+        "temperature": 0.7,
+        "max_tokens": 1024,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final aiContent = data['choices'][0]['message']['content'];
       
-      final response = await _chat!.sendMessage(
-        Content.text(message),
-      );
+      // Add AI response to history
+      _history.add({"role": "assistant", "content": aiContent});
       
-      return response.text ?? 'I am sorry, I could not process that.';
-    } catch (e) {
-      return 'Error: ${e.toString()}';
+      return aiContent;
+    } else {
+      throw Exception('Groq API Error: ${response.body}');
     }
   }
 
   void resetChat() {
-    _chat = null;
+    _history = [];
   }
 }

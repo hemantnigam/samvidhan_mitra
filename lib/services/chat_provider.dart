@@ -10,7 +10,10 @@ class ChatProvider with ChangeNotifier {
   
   List<ChatMessage> _messages = [];
   bool _isLoading = false;
-  String _currentLanguage = 'en_IN'; // Default to English (India)
+  bool _isOverlayVisible = false;
+  
+  // Internal state for speech locale
+  String _speechLocale = 'hi_IN'; 
 
   ChatProvider({required String apiKey}) : _aiService = AIService(apiKey: apiKey) {
     _loadHistory();
@@ -19,15 +22,16 @@ class ChatProvider with ChangeNotifier {
   List<ChatMessage> get messages => _messages;
   bool get isLoading => _isLoading;
   bool get isListening => _speechService.isListening;
-  String get currentLanguage => _currentLanguage;
+  bool get isOverlayVisible => _isOverlayVisible;
+  String get speechLocale => _speechLocale;
 
-  void _loadHistory() {
-    _messages = DatabaseService.getHistory();
+  void toggleSpeechLocale() {
+    _speechLocale = (_speechLocale == 'hi_IN') ? 'en_IN' : 'hi_IN';
     notifyListeners();
   }
 
-  void setLanguage(String languageCode) {
-    _currentLanguage = languageCode;
+  void _loadHistory() {
+    _messages = DatabaseService.getHistory();
     notifyListeners();
   }
 
@@ -58,37 +62,91 @@ class ChatProvider with ChangeNotifier {
       _messages.add(aiMessage);
       await DatabaseService.addMessage(aiMessage);
     } catch (e) {
-      // Handle error
+      final errorMessage = ChatMessage(
+        text: "Error: ${e.toString()}",
+        isUser: false,
+        timestamp: DateTime.now(),
+      );
+      _messages.add(errorMessage);
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> startListening() async {
-    final initialized = await _speechService.initSpeech();
-    if (initialized) {
-      await _speechService.startListening((text) {
-        // We can handle partial results here if needed
-      }, _currentLanguage);
-      notifyListeners();
+  String _lastRecognizedText = '';
+  String? _currentlySpeakingMessageId;
+
+  String get lastRecognizedText => _lastRecognizedText;
+  String? get currentlySpeakingMessageId => _currentlySpeakingMessageId;
+
+  Future<void> toggleListening() async {
+    if (_speechService.isListening) {
+      await stopListening();
+    } else {
+      await startListening();
     }
   }
 
-  Future<void> stopListeningAndSend() async {
-    // In a real app, you'd capture the final recognized text
-    // For this prototype, we'll assume the speech service handles the callback
+  Future<void> startListening() async {
+    final initialized = await _speechService.initSpeech(
+      onError: (error) {
+        print("Speech Error: $error");
+        notifyListeners();
+      },
+      onStatus: (status) {
+        print("Speech Status: $status");
+        notifyListeners();
+      },
+    );
+    
+    if (initialized) {
+      _lastRecognizedText = '';
+      _isOverlayVisible = true;
+      await _speechService.startListening(
+        localeId: _speechLocale,
+        onResult: (text) {
+          _lastRecognizedText = text;
+          notifyListeners();
+        },
+      );
+      notifyListeners();
+    } else {
+      print("Speech not initialized. Check permissions.");
+    }
+  }
+
+  Future<void> stopListening() async {
     await _speechService.stopListening();
+    _isOverlayVisible = false;
     notifyListeners();
   }
 
-  Future<void> speakMessage(String text) async {
-    final langCode = _currentLanguage.startsWith('hi') ? 'hi-IN' : 'en-IN';
-    await _speechService.speak(text, langCode);
+  void clearRecognizedText() {
+    _lastRecognizedText = '';
+    notifyListeners();
+  }
+
+  Future<void> toggleSpeakMessage(ChatMessage message) async {
+    final messageId = message.timestamp.toIso8601String();
+    if (_currentlySpeakingMessageId == messageId) {
+      await stopSpeaking();
+    } else {
+      await stopSpeaking(); 
+      _currentlySpeakingMessageId = messageId;
+      notifyListeners();
+
+      await _speechService.speak(message.text, () {
+        _currentlySpeakingMessageId = null;
+        notifyListeners();
+      });
+    }
   }
 
   Future<void> stopSpeaking() async {
     await _speechService.stopSpeaking();
+    _currentlySpeakingMessageId = null;
+    notifyListeners();
   }
 
   Future<void> clearHistory() async {

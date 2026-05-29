@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
-import 'onboarding_screen.dart';
+import 'chat_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,9 +19,10 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigateToNext() async {
     await Future.delayed(const Duration(seconds: 3));
     if (!mounted) return;
+    
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+      MaterialPageRoute(builder: (context) => const ChatScreen()),
     );
   }
 

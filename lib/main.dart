@@ -20,7 +20,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ChatProvider(apiKey: AppConstants.geminiApiKey),
+          create: (_) => ChatProvider(apiKey: AppConstants.aiApiKey),
         ),
       ],
       child: const SamvidhanMitraApp(),
@@ -43,10 +43,7 @@ class SamvidhanMitraApp extends StatelessWidget {
           seedColor: AppConstants.primaryBlue,
           primary: AppConstants.primaryBlue,
         ),
-        textTheme: GoogleFonts.muktaTextTheme(Theme.of(context).textTheme).copyWith(
-          // English fonts will fallback to default if not explicitly set, 
-          // but Mukta is great for both.
-        ),
+        textTheme: GoogleFonts.muktaTextTheme(Theme.of(context).textTheme),
       ),
       home: const SplashScreen(),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import '../models/chat_message.dart';
 import '../services/chat_provider.dart';
 import '../utils/constants.dart';
@@ -17,7 +19,7 @@ class ChatBubble extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(12),
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.8,
+          maxWidth: MediaQuery.of(context).size.width * 0.85,
         ),
         decoration: BoxDecoration(
           color: message.isUser ? AppConstants.primaryBlue.withOpacity(0.1) : Colors.white,
@@ -39,35 +41,50 @@ class ChatBubble extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              message.text,
-              style: TextStyle(
-                fontSize: 16,
-                color: message.isUser ? AppConstants.primaryBlue : Colors.black87,
-              ),
-            ),
+            // Move buttons to the TOP
             if (!message.isUser) ...[
-              const Divider(height: 20),
               Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.volume_up, size: 20),
+                    icon: Icon(
+                      context.watch<ChatProvider>().currentlySpeakingMessageId == message.timestamp.toIso8601String()
+                          ? Icons.stop_circle
+                          : Icons.volume_up,
+                      size: 18,
+                      color: AppConstants.primaryBlue,
+                    ),
                     onPressed: () {
-                      context.read<ChatProvider>().speakMessage(message.text);
+                      context.read<ChatProvider>().toggleSpeakMessage(message);
                     },
-                    tooltip: 'Read Aloud',
+                    constraints: const BoxConstraints(),
+                    padding: const EdgeInsets.all(4),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.copy, size: 20),
+                    icon: const Icon(Icons.copy, size: 18, color: AppConstants.primaryBlue),
                     onPressed: () {
-                      // Implement copy to clipboard
+                      Clipboard.setData(ClipboardData(text: message.text));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Copied to clipboard!'), duration: Duration(seconds: 1)),
+                      );
                     },
-                    tooltip: 'Copy',
+                    constraints: const BoxConstraints(),
+                    padding: const EdgeInsets.all(4),
                   ),
                 ],
               ),
+              const SizedBox(height: 4),
             ],
+            MarkdownBody(
+              data: message.text,
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(
+                  fontSize: 16,
+                  color: message.isUser ? AppConstants.primaryBlue : Colors.black87,
+                ),
+                strong: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
           ],
         ),
       ),
