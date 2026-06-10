@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,6 +11,12 @@ import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  if (Platform.isAndroid) {
+    try {
+      await FlutterDisplayMode.setHighRefreshRate();
+    } catch (_) {}
+  }
   
   // Load environment variables
   await dotenv.load(fileName: ".env");
@@ -38,12 +46,28 @@ class SamvidhanMitraApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        primaryColor: AppConstants.primaryBlue,
+        scaffoldBackgroundColor: AppConstants.paperWhite,
+        primaryColor: AppConstants.primaryNavy,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: AppConstants.primaryBlue,
-          primary: AppConstants.primaryBlue,
+          seedColor: AppConstants.primaryNavy,
+          primary: AppConstants.primaryNavy,
+          secondary: AppConstants.accentWheat,
+          surface: AppConstants.paperWhite,
         ),
-        textTheme: GoogleFonts.muktaTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.instrumentSansTextTheme(
+          Theme.of(context).textTheme,
+        ).copyWith(
+          displayLarge: GoogleFonts.newsreader(
+            textStyle: Theme.of(context).textTheme.displayLarge,
+            fontWeight: FontWeight.bold,
+            color: AppConstants.primaryNavy,
+          ),
+          headlineMedium: GoogleFonts.newsreader(
+            textStyle: Theme.of(context).textTheme.headlineMedium,
+            fontWeight: FontWeight.bold,
+            color: AppConstants.primaryNavy,
+          ),
+        ),
       ),
       home: const SplashScreen(),
     );

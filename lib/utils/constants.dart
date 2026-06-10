@@ -4,11 +4,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AppConstants {
   static const String appName = 'Samvidhan Mitra';
   
-  // Colors
-  static const Color primaryBlue = Color(0xFF1A365D);
-  static const Color accentSaffron = Color(0xFFFF9933);
-  static const Color accentGreen = Color(0xFF138808);
-  static const Color backgroundColor = Color(0xFFF7FAFC);
+  // Color Palette - Modern Khadi Minimalist (EXACT HEX)
+  static const Color primaryNavy = Color(0xFF0F172A); // Slate/Dark Blue
+  static const Color mutedNavy = Color(0xFF1A2744); // Card surfaces
+  static const Color accentWheat = Color(0xFFF5DEB3); // Wheat White
+  static const Color accentGreen = Color(0xFF059669); // Emerald Green
+  static const Color paperWhite = Color(0xFFFEFCF8); // Warm off-white surface
+  static const Color secondaryGray = Color(0xFF8B8175); // Warm gray text
+  static const Color emergencyRed = Color(0xFFDC2626); // SOS Tint
+
+  static const Color backgroundColor = paperWhite;
   
   // AI Config fetched from .env
   static String get aiApiKey => dotenv.env['AI_API_KEY'] ?? '';
@@ -56,4 +61,17 @@ Always follow this structure:
 9. NO LEGAL ADVICE
 * Add this naturally: "This is educational information, not legal advice."
 ''';
+
+  static const List<String> featuredArticleIds = [
+    "article 14",
+    "article 19",
+    "article 32",
+    "article 370",
+    "article 13",
+    "article 16",
+    "article 22",
+    "article 29",
+    "article 30",
+    "article 368",
+  ];
 }

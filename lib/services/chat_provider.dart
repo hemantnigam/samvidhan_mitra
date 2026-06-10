@@ -13,7 +13,7 @@ class ChatProvider with ChangeNotifier {
   bool _isOverlayVisible = false;
   
   // Internal state for speech locale
-  String _speechLocale = 'hi_IN'; 
+  String _speechLocale = 'en_IN'; 
 
   ChatProvider({required String apiKey}) : _aiService = AIService(apiKey: apiKey) {
     _loadHistory();
@@ -51,7 +51,7 @@ class ChatProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final aiResponseText = await _aiService.sendMessage(text);
+      final aiResponseText = await _aiService.sendMessage(text, preferredLocale: _speechLocale);
       
       final aiMessage = ChatMessage(
         text: aiResponseText,

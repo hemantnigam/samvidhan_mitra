@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
-import 'chat_screen.dart';
+import 'main_layout.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,38 +22,38 @@ class _SplashScreenState extends State<SplashScreen> {
     
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const ChatScreen()),
+      MaterialPageRoute(builder: (context) => const MainLayout()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppConstants.paperWhite,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
               Icons.account_balance,
-              size: 100,
-              color: AppConstants.primaryBlue,
+              size: 80,
+              color: AppConstants.primaryNavy,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             Text(
               AppConstants.appName,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: AppConstants.primaryBlue,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: AppConstants.primaryNavy,
+                fontFamily: 'Newsreader',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             const Text(
               'Constitution for Everyone',
               style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+                fontSize: 14,
+                color: AppConstants.secondaryGray,
+                letterSpacing: 1.2,
               ),
             ),
           ],
