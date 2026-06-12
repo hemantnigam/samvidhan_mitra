@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import '../services/chat_provider.dart';
 import '../services/constitution_service.dart';
 import '../utils/constants.dart';
@@ -147,11 +148,72 @@ class _HomeScreenState extends State<HomeScreen> {
               _buildPromptChips(context),
               const SizedBox(height: 32),
               _buildCategoryGrid(context),
+              const SizedBox(height: 48),
+              
+              // Source & Disclaimer Section
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppConstants.secondaryGray.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Source of Information",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: AppConstants.primaryNavy,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Constitutional data is sourced from the official website of the Legislative Department, Ministry of Law and Justice, Government of India.",
+                      style: TextStyle(fontSize: 11, color: AppConstants.secondaryGray),
+                    ),
+                    const SizedBox(height: 8),
+                    InkWell(
+                      onTap: () => _launchURL("https://legislative.gov.in/constitution-of-india/"),
+                      child: const Text(
+                        "Visit Official Source (legislative.gov.in)",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 11,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                    const Divider(height: 24),
+                    const Text(
+                      "Disclaimer",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: AppConstants.primaryNavy,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      "Samvidhan Mitra is an independent educational tool. It is NOT affiliated with, authorized by, or endorsed by any government entity.",
+                      style: TextStyle(fontSize: 11, color: AppConstants.secondaryGray),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await url_launcher.canLaunchUrl(uri)) {
+      await url_launcher.launchUrl(uri);
+    }
   }
 
   Widget _buildDailyArticle(BuildContext context) {

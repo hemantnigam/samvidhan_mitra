@@ -1,77 +1,110 @@
-# Samvidhan Mitra (संविधान मित्र)
+# 🇮🇳 Samvidhan Mitra (Constitutional Friend)
 
-**Samvidhan Mitra** (Constitution Friend) is an AI-powered Flutter application designed to make the Constitution of India accessible and understandable for everyone. It provides a simple, conversational interface where users can ask questions about their rights, duties, and constitutional provisions in their preferred language.
+[![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)](https://firebase.google.com/)
 
-> *"Constitution for Everyone"*
+**Samvidhan Mitra** is an AI-powered Flutter application designed to bridge the gap between complex legal language and the common citizen. It serves as a simplified, conversational guide to the Constitution of India, fostering constitutional literacy across the nation.
 
-## 🚀 Features
+---
 
-- **Conversational AI**: Powered by **Llama-3.3-70b-versatile** via **Groq API** for accurate and simple explanations of constitutional concepts.
-- **Bilingual Support**: Full support for **English**, **Hindi**, and **Hinglish**. The AI automatically matches the user's input language.
-- **Voice Interaction**:
-  - **Speech-to-Text (STT)**: Ask questions naturally using your voice (Powered by `speech_to_text`).
-  - **Text-to-Speech (TTS)**: Listen to the AI's responses with high-quality, localized Indian voices (Powered by `flutter_tts`).
-- **Local History**: Chat history is saved locally using **Hive** database, allowing you to revisit previous conversations.
-- **Simple Explanations**: Concepts are broken down into easy-to-understand language, avoiding dense legal jargon.
-- **Markdown Rendering**: AI responses are beautifully formatted with Markdown for better readability.
-- **Modern UI**: A clean, responsive interface built with **Material 3** and **Google Fonts (Mukta)**.
+## 🌟 Key Features
 
-## 🛠️ Tech Stack
+### 🤖 AI-Powered Assistant
+- **Bilingual Conversations:** Ask questions in English, Hindi, or Hinglish.
+- **Simplified Explanations:** Our advanced AI breaks down complex legal articles into "bol-chal" (conversational) language.
+- **Context-Aware:** Understands the relationship between different Articles, Parts, and Schedules.
 
-- **Framework**: [Flutter](https://flutter.dev/) (Dart)
-- **AI Model**: Llama-3.3-70b-versatile (via [Groq API](https://groq.com/))
-- **State Management**: [Provider](https://pub.dev/packages/provider)
-- **Local Database**: [Hive](https://pub.dev/packages/hive)
-- **Typography**: [Google Fonts (Mukta)](https://fonts.google.com/specimen/Mukta)
-- **Utilities**: 
-  - `speech_to_text` for voice input
-  - `flutter_tts` for voice output
-  - `flutter_dotenv` for environment management
-  - `flutter_markdown` for rich text rendering
+### 🔍 Smart Offline Search
+- **Instant Access:** Search any Article by its number (e.g., "Article 21") or keyword without an internet connection.
+- **Lightning Fast:** Uses Hive, a local NoSQL database, for near-instant search results.
 
-## 📦 Installation & Setup
+### 🚨 Emergency SOS System
+- **One-Tap Helplines:** Integrated access to essential national services:
+  - 👮 Police (100)
+  - 👩 Women Helpline (1091)
+  - 👶 Child Helpline (1098)
+  - 🚑 Disaster Management (108)
+
+### 📅 Article of the Day
+- **Daily Learning:** Get a hand-picked constitutional insight every day to build your knowledge step-by-step.
+
+### 🔒 Privacy & Performance
+- **Local Storage:** Your chat history and search data stay on your device.
+- **Optimized UI:** Smooth 120Hz support and a "Paper White" aesthetic for comfortable long-term reading.
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework:** Flutter (3.12.0+)
+- **State Management:** Provider
+- **Local Database:** Hive (for Articles & Chat history)
+- **AI Integration:** Google Gemini API / Custom LLM (via `ai_service.dart`)
+- **Voice Features:** Speech-to-Text & Flutter TTS
+- **Utilities:** `flutter_dotenv` for environment variables, `url_launcher` for SOS calls.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
+- Flutter SDK installed on your machine.
+- An Android/iOS device or emulator.
+- (Optional) A `.env` file with your AI API keys.
 
-- Flutter SDK (latest version recommended)
-- Android Studio or VS Code
-- A Groq API Key (Get it from [Groq Cloud Console](https://console.groq.com/))
+### Installation
 
-### Steps
-
-1. **Clone the repository**:
+1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/samvidhan_mitra.git
+   git clone https://github.com/yourusername/samvidhan_mitra.git
    cd samvidhan_mitra
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies:**
    ```bash
    flutter pub get
    ```
 
-3. **Configure Environment Variables**:
-   Create a `.env` file in the root directory and add your API keys:
+3. **Configure Environment:**
+   Create a `.env` file in the root directory and add your keys:
    ```env
-   AI_API_KEY=your_groq_api_key_here
+   AI_API_KEY=your_key_here
    ```
 
-4. **Run the app**:
+4. **Run the app:**
    ```bash
    flutter run
    ```
 
-## 🎨 UI & Design
+---
 
-The app features a clean, India-inspired color palette:
-- **Primary Blue**: `#1A365D` (Representing trust and professionalism)
-- **Accent Saffron**: `#FF9933` (Representing vibrancy)
-- **Accent Green**: `#138808` (Representing growth)
-- **Typography**: Uses the **Mukta** font family for excellent readability in both English and Hindi.
+## ⚖️ Source of Information & Disclaimer
 
-## 📄 License & Disclaimer
+### Source
+The constitutional text and legal data used in this application are sourced from the **Official Website of the Legislative Department, Ministry of Law and Justice, Government of India**.
+- **URL:** [https://legislative.gov.in/constitution-of-india/](https://legislative.gov.in/constitution-of-india/)
 
-This project is for educational purposes. All constitutional information provided is for awareness and does not constitute legal advice. For legal matters, please consult a qualified legal professional.
+### Disclaimer
+**Samvidhan Mitra is an independent educational tool.** 
+- It is **NOT** an official government application.
+- It is **NOT** affiliated with, authorized by, or endorsed by the Government of India or any legal entity.
+- The information provided is for educational purposes only and **does not constitute legal advice**. For legal matters, please consult a qualified legal professional.
 
 ---
-Developed with ❤️ for a more constitutional-aware India.
+
+## 🤝 Contributing
+Contributions are welcome! If you'd like to improve the AI prompts, add more languages, or fix a bug:
+1. Fork the project.
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+---
+
+## 📜 License
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+*Created with ❤️ for the citizens of India.*
