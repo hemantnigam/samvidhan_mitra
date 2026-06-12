@@ -46,6 +46,26 @@
 
 ---
 
+## 🧠 AI Architecture
+
+Samvidhan Mitra uses a sophisticated hybrid architecture to ensure legal accuracy while maintaining a friendly conversational tone.
+
+### 1. Large Language Model (LLM)
+- **Model:** `llama-3.3-70b-versatile` (via Groq API)
+- **Reasoning:** Selected for its high performance in complex reasoning and multilingual capabilities, ensuring it can handle legal nuances in Hindi, English, and Hinglish.
+
+### 2. Retrieval-Augmented Generation (RAG)
+To prevent "hallucinations" (the AI making up laws), we use a custom RAG system:
+- **Local Knowledge Base:** The entire Constitution is stored locally in `assets/constitution.json`.
+- **Semantic Retrieval:** When a user asks a question, the app performs a weighted keyword search to find the top 3 most relevant Articles.
+- **Context Injection:** These official Articles are injected into the AI's prompt as "Ground Truth," ensuring the response is based strictly on the actual law.
+
+### 3. Smart Bilingual Fallback
+- **Language Detection:** The system automatically detects if a query is in Hindi or English and forces the AI to respond in the same language.
+- **Offline Mode:** If the internet is unavailable, the system bypasses the AI and directly shows the official constitutional text from the local database, ensuring the app remains useful in remote areas.
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
